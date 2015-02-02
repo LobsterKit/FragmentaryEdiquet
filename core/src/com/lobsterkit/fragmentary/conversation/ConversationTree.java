@@ -7,17 +7,36 @@ public class ConversationTree<ContentType, BranchType>
 {
 	public class ConversationNode
 	{
-		HashMap<BranchType, ConversationNode> branches;
+		HashMap<BranchType, String> branches;
 		ContentType content;
+		String nodeID;
 		
-		public ConversationNode(ContentType content)
+		public ConversationNode(ContentType content, String nodeID)
 		{
 			super();
 			this.branches = new HashMap<>();
 			this.content = content;
-			nodeFromID.put(idCounter, this);
-			idsFromNode.put(this, idCounter);
-			idCounter++;
+			this.nodeID = nodeID;
+			if (nodeID == null)
+				throw new IllegalArgumentException("ID cannot be null");
+			register();
+		}
+		
+		private void register()
+		{
+			validateRegistration();
+			nodeFromID.put(nodeID, this);
+			idFromNode.put(this, nodeID);
+		}
+		
+		private void validateRegistration()
+		{
+			if (nodeFromID.containsKey(nodeID))
+			{
+				throw new IllegalStateException(
+						"Node IDs must be unique. Found multiple nodes with ID: "
+								+ nodeID);
+			}
 		}
 		
 		public boolean hasBranch(BranchType branch)
@@ -31,36 +50,33 @@ public class ConversationTree<ContentType, BranchType>
 		}
 	}
 	
-	private int idCounter;
-	private HashMap<ConversationNode, Integer> idsFromNode;
-	private HashMap<Integer, ConversationNode> nodeFromID;
+	private HashMap<ConversationNode, String> idFromNode;
+	private HashMap<String, ConversationNode> nodeFromID;
 	private ConversationNode rootNode;
 	private ConversationNode currentNode;
 	
-	public ConversationTree(ContentType rootContent)
+	public ConversationTree(ContentType rootContent, String rootID)
 	{
-		this.idsFromNode = new HashMap<>();
+		this.idFromNode = new HashMap<>();
 		this.nodeFromID = new HashMap<>();
-		this.rootNode = new ConversationNode(rootContent);
+		this.rootNode = new ConversationNode(rootContent, rootID);
 		this.currentNode = this.rootNode;
 	}
 	
-	private int addBranch(BranchType branch, ConversationNode node)
+	public void addNewBranch(BranchType branch, String nodeID, ContentType content)
 	{
-		currentNode.branches.put(branch, node);
-		return idsFromNode.get(currentNode);
+		ConversationNode newNode = new ConversationNode(content, nodeID);
+		addLinkedBranch(branch, newNode.nodeID);
 	}
 	
-	public int addBranch(BranchType branch, ContentType content)
+	public void addNewNode(String nodeID, ContentType content)
 	{
-		ConversationNode node = new ConversationNode(content);
-		return addBranch(branch, node);
+		new ConversationNode(content, nodeID);
 	}
 	
-	public int addBranch(BranchType branch, int contentID)
+	public void addLinkedBranch(BranchType branch, String nodeID)
 	{
-		ConversationNode node = nodeFromID.get(contentID);
-		return addBranch(branch, node);
+		currentNode.branches.put(branch, nodeID);
 	}
 	
 	private void validateNonNull(Object object, String message)
@@ -71,19 +87,32 @@ public class ConversationTree<ContentType, BranchType>
 		}
 	}
 	
+	public void jumpToNode(String nodeID)
+	{
+		this.currentNode = nodeFromID.get(nodeID);
+	}
+	
+	public void jumpToRoot()
+	{
+		this.currentNode = this.rootNode;
+	}
+	
 	public ContentType enterBranch(BranchType branch)
 	{
-		ConversationNode branchNode = currentNode.branches.get(branch);
-		validateNonNull(branchNode, "Cannot enter null branch");
-		
+		String branchID = currentNode.branches.get(branch);
+		validateNonNull(branchID, "Cannot enter null branch");
+
+		ConversationNode branchNode = nodeFromID.get(branchID);
 		this.currentNode = branchNode;
 		return branchNode.content;
 	}
 	
 	public ContentType peekBranch(BranchType branch)
 	{
-		ConversationNode branchNode = currentNode.branches.get(branch);
-		validateNonNull(branchNode, "Branch is null or does not exist");
+		String branchID = currentNode.branches.get(branch);
+		validateNonNull(branchID, "Branch is null or does not exist");
+		
+		ConversationNode branchNode = nodeFromID.get(branchID);
 		return branchNode.content;
 	}
 	
@@ -107,9 +136,9 @@ public class ConversationTree<ContentType, BranchType>
 		return currentNode.content;
 	}
 	
-	public int getCurrentID()
+	public String getCurrentID()
 	{
-		return idsFromNode.get(currentNode);
+		return idFromNode.get(currentNode);
 	}
 	
 	public void enterNode(int id)

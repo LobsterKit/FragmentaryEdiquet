@@ -1,9 +1,15 @@
 #JSGF V1.0;
 
-/**
- * JSGF Grammar for Hello World example
- */
-
 grammar grammarRPG;
 
-public <direction> = (North | South | East | West | quit | Stop);
+public <direction> = (North | South | East | West);
+
+public <endCommand> = (stop | cease | halt execution);
+
+public <movementCommand> = (go) <direction>;
+
+public <place> = (home | forest | river);
+
+public <travelCommand> = (go to the | go) <place>;
+
+public <bodyCommand> = (stand | get) (up);

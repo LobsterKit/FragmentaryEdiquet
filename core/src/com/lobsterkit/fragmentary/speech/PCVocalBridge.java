@@ -1,18 +1,34 @@
 package com.lobsterkit.fragmentary.speech;
 
+import java.io.IOException;
 import java.net.URL;
 
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.recognizer.Recognizer;
 import edu.cmu.sphinx.result.Result;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
+import edu.cmu.sphinx.util.props.PropertyException;
 
 public class PCVocalBridge implements VocalBridge
 {
 	private Recognizer recognizer;
 	private Microphone microphone;
+	private boolean perpeturalRecordingEnabled;
 	
-	public PCVocalBridge(URL configurationURL)
+	public PCVocalBridge(URL configurationURL, boolean perpeturalRecordingEnabled)
+			throws InstantiationException
+	{
+		this.perpeturalRecordingEnabled = perpeturalRecordingEnabled;
+		initializeAudioInfrastructure(configurationURL);
+	}
+	
+	public PCVocalBridge(URL configurationURL) throws InstantiationException
+	{
+		this(configurationURL, true);
+	}
+	
+	private void initializeAudioInfrastructure(URL configurationURL)
+			throws InstantiationException
 	{
 		try
 		{
@@ -29,9 +45,38 @@ public class PCVocalBridge implements VocalBridge
 				throw new IllegalStateException("Could not start microphone.");
 			}
 		}
-		catch (Exception exception)
+		catch (IOException loadingException)
 		{
-			exception.printStackTrace();
+			throw new IllegalArgumentException("Invalid configuration file",
+					loadingException);
+		}
+		catch (PropertyException propertyException)
+		{
+			throw new InstantiationException("Unable to create recognizer or microphone.");
+		}
+	}
+	
+	private void preListen()
+	{
+		if (!microphone.isRecording())
+		{
+			microphone.startRecording();
+			try
+			{
+				this.wait();
+			}
+			catch (InterruptedException e)
+			{
+				// continue
+			}
+		}
+	}
+	
+	private void postListen()
+	{
+		if (!perpeturalRecordingEnabled)
+		{
+			microphone.stopRecording();
 		}
 	}
 	
@@ -48,6 +93,7 @@ public class PCVocalBridge implements VocalBridge
 	@Override
 	public String listen()
 	{
+		preListen();
 		Result result = recognizer.recognize();
 		String resultString;
 		
@@ -59,6 +105,7 @@ public class PCVocalBridge implements VocalBridge
 		{
 			resultString = result.getBestFinalResultNoFiller();
 		}
+		postListen();
 		
 		return resultString;
 	}

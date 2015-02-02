@@ -1,0 +1,33 @@
+{
+	"intro":
+	{
+		"text":"The wind howls through the trees of the forest that surrounds you The sky - barely visible - makes you dizzy as you lie in the dirt.",
+		"branches":
+		{
+			"stand up":"stand",
+			"get up":"stand"
+		}
+	},
+	
+	"stand":
+	{
+		"text":"You breath deeply as you struggle to stand. Perhaps you should wonder where you are, or how you got here. Why you feel so weak. Why your clothes feel foreign to you, or why you have no shoes. Still, even through the uncertainty, the daylight is slowley fading. Perhaps the questions can standby while you deal with more practical matters...",
+		"branches":
+		{
+			"go west":"westPath",
+			"go east":"eastPath"
+		}
+	},
+	
+	"westPath":
+	{
+		"text":"Putting your mind at bay, you begin walking to the west. The shimmering light of the setting sun is uncomfortable as you walk. \"It's evening\" you think. \"The light will soon be gone\"As you walk the light only becomes more intense. Brighter and brighter until you can't see at all. The light consumes you.",
+		"branches":{}
+	},
+	
+	"eastPath":
+	{
+		"text":"Putting your mind at bay, you begin walking eastward. Even through the thick trees, the sun at your back shines through, casting sharp shadows along your path. As the light grows dimmer, you begin to hear the howl of wolves in the distance.",
+		"branches":{}
+	}
+}

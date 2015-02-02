@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="dependencies/sphinx/sphinx4.jar"/>
 	<classpathentry kind="lib" path="dependencies/sphinx/TIDIGITS_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
 	<classpathentry kind="lib" path="dependencies/sphinx/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
+	<classpathentry kind="lib" path="dependencies/org.json-20140505.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
