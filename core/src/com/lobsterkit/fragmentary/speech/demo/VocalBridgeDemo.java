@@ -6,10 +6,10 @@ import com.lobsterkit.fragmentary.speech.PCVocalBridge;
 
 public class VocalBridgeDemo
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws InstantiationException
 	{
 		URL configurationURL = VocalBridgeDemo.class.getResource("config.xml");
-		PCVocalBridge bridge = new PCVocalBridge(configurationURL);
+		PCVocalBridge bridge = new PCVocalBridge(configurationURL, true);
 		
 		while (true)
 		{
@@ -17,7 +17,7 @@ public class VocalBridgeDemo
 			String speech = bridge.listen();
 			System.out.println(speech);
 			
-			if ("quit".equals(speech) || "stop".equals(speech))
+			if ("halt execution".equals(speech) || "stop".equals(speech) || "cease".equals(speech))
 			{
 				break;
 			}
