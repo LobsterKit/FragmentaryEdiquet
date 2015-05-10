@@ -2,14 +2,10 @@
 
 grammar grammarRPG;
 
-public <direction> = (North | South | East | West);
+public <direction> = (East | West);
 
 public <endCommand> = (stop | cease | halt execution);
 
 public <movementCommand> = (go) <direction>;
-
-public <place> = (home | forest | river);
-
-public <travelCommand> = (go to the | go) <place>;
 
 public <bodyCommand> = (stand | get) (up);

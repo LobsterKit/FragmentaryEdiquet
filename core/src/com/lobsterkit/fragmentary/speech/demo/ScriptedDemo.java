@@ -13,7 +13,7 @@ import com.lobsterkit.fragmentary.speech.PCVocalBridge;
 
 public class ScriptedDemo
 {
-	private static String[] haultCommands = new String[] { "hault execution", "stop",
+	private static String[] haultCommands = new String[] { "halt execution", "stop",
 			"cease" };
 	private ConversationTree<String, String> tree;
 	private PCVocalBridge bridge;

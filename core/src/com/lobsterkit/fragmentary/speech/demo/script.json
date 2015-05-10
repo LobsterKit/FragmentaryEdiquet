@@ -11,7 +11,7 @@
 	
 	"stand":
 	{
-		"text":"You breath deeply as you struggle to stand. Perhaps you should wonder where you are, or how you got here. Why you feel so weak. Why your clothes feel foreign to you, or why you have no shoes. Still, even through the uncertainty, the daylight is slowley fading. Perhaps the questions can standby while you deal with more practical matters...",
+		"text":"You breath deeply as you struggle to stand. Perhaps you should wonder where you are, or how you got here. Why you feel so weak. Why your clothes feel foreign to you, or why you have no shoes. Still, even through the uncertainty, the daylight is slowly fading. Perhaps the questions can standby while you deal with more practical matters...",
 		"branches":
 		{
 			"go west":"westPath",
